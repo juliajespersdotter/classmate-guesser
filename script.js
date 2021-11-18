@@ -191,17 +191,30 @@ const missing_students = [
 
 const classmateImgEl = document.querySelector('#classmate');
 const classmateNameEl = document.querySelector('#alternatives');
+const cardEl = document.querySelector('.card');
 
+
+// arrays to save answers
+correct = [];
+incorrect = [];
+
+//counter
+guess = 0;
+
+// function to shuffle arrays
+const shuffleArray = (students) => {
+	for(let i = students.length - 1; i > 0; i--){
+		const j = Math.floor(Math.random() * (i + 1))
+		const temp = students[i]
+		students[i] = students[j]
+		students[j] = temp
+  }
+}
+
+// get random correct classmate name + img and 3 random incorrect name + img
 const getClassmate = () => {
-    const shuffleArray = (students) => {
-        for(let i = students.length - 1; i > 0; i--){
-            const j = Math.floor(Math.random() * (i + 1))
-            const temp = students[i]
-            students[i] = students[j]
-            students[j] = temp
-      }
-    }
 
+	// shuffle all objects in student array
     shuffleArray(students);
     console.log(students);
     
@@ -209,8 +222,14 @@ const getClassmate = () => {
     const classmateImg = classmate.image;
     classmateImgEl.innerHTML = `<img src="${classmateImg}" alt="" class="card-img-top" id="classmate">`;
 
-    const randomClassMates = students.slice(0, 4);
-    shuffleArray(randomClassMates);
+	// get 4 random classmates
+    const randomClassmates = students.slice(0, 4);
+
+	// get correct answer in smaller array
+	const correctAnswer = randomClassmates[0];
+	
+	// shuffle first four objects
+    shuffleArray(randomClassmates);
 
     /*
     const names = students.filter(student => {
@@ -220,11 +239,41 @@ const getClassmate = () => {
         students[3];
     })
     */
-    console.log(randomClassMates);
 
-    randomClassMates.forEach(classmate => {
-        classmateNameEl.innerHTML += `<button id="classmateName" class="btn btn-primary w-100 m-1">${classmate.name}</button>`;
+    console.log(randomClassmates);
+	classmateNameEl.innerHTML = "";
+
+    randomClassmates.forEach(classmate => {	
+		if(classmate == correctAnswer){
+			console.log("This is the right answer!", correctAnswer);
+
+			classmateNameEl.innerHTML += `<button id="correctAnswer" data-classmate="${classmate.name}" class="btn btn-primary w-100 m-1">${classmate.name}</button>`;
+		} else {
+			classmateNameEl.innerHTML += `<button id="wrongAnswer" class="btn btn-primary w-100 m-1">${classmate.name}</button>`;
+		}
     })
 }
 
 getClassmate();
+
+cardEl.addEventListener('click', e =>{
+	if(e.target.tagName === 'BUTTON'){
+		console.log(e.target);
+
+		guess++;
+
+		if(e.target.id === 'correctAnswer'){
+			console.log("Correct answer");
+
+			correct.push(e.target.innerText);
+
+			console.log(correct);
+		} else{
+			console.log("Incorrect answer");
+			incorrect.push(e.target.innerText);
+			console.log(incorrect);
+		}
+
+		getClassmate();
+	}
+});
