@@ -190,24 +190,27 @@ const missing_students = [
 ];
 
 const classmateImgEl = document.querySelector('#classmate');
-const classmateNameEl = document.querySelector('#alternatives');
-const cardEl = document.querySelector('.card');
+const classmateNameEl = document.querySelector('#button-wrapper');
+const quizEl = document.querySelector('#quiz');
+let resultEl = document.querySelector('.result');
+let counterEl = document.querySelector('.counter');
 
 
 // arrays to save answers
-correct = [];
-incorrect = [];
+const correct = [];
+const incorrect = [];
 
 //counter
-guess = 0;
+let guess = 0;
+let correctGuesses = 0;
 
 // function to shuffle arrays
-const shuffleArray = (students) => {
-	for(let i = students.length - 1; i > 0; i--){
+const shuffleArray = (array) => {
+	for(let i = array.length - 1; i > 0; i--){
 		const j = Math.floor(Math.random() * (i + 1))
-		const temp = students[i]
-		students[i] = students[j]
-		students[j] = temp
+		const temp = array[i]
+		array[i] = array[j]
+		array[j] = temp
   }
 }
 
@@ -217,63 +220,82 @@ const getClassmate = () => {
 	// shuffle all objects in student array
     shuffleArray(students);
     console.log(students);
-    
-    const classmate = students[0];
-    const classmateImg = classmate.image;
-    classmateImgEl.innerHTML = `<img src="${classmateImg}" alt="" class="card-img-top" id="classmate">`;
 
 	// get 4 random classmates
     const randomClassmates = students.slice(0, 4);
 
-	// get correct answer in smaller array
-	const correctAnswer = randomClassmates[0];
+	// get correct student name and img in smaller array
+	const correctStudent = randomClassmates[0];
+	classmateImgEl.src = correctStudent.image;
+	const correctName = correctStudent.name;
 	
 	// shuffle first four objects
     shuffleArray(randomClassmates);
-
-    /*
-    const names = students.filter(student => {
-        students[0];
-        students[1];
-        students[2];
-        students[3];
-    })
-    */
-
     console.log(randomClassmates);
+
 	classmateNameEl.innerHTML = "";
 
-    randomClassmates.forEach(classmate => {	
-		if(classmate == correctAnswer){
-			console.log("This is the right answer!", correctAnswer);
+	const randomNames = randomClassmates.map(classmate => classmate.name);
 
-			classmateNameEl.innerHTML += `<button id="correctAnswer" data-classmate="${classmate.name}" class="btn btn-primary w-100 m-1">${classmate.name}</button>`;
+    randomNames.forEach(classmate => {	
+		if(classmate == correctName){
+			console.log("This is the right answer!", correctName);
+
+			classmateNameEl.innerHTML += `<button id="correctAnswer" class="btn btn-light w-50 m-1">${classmate}</button>`;
 		} else {
-			classmateNameEl.innerHTML += `<button id="wrongAnswer" class="btn btn-primary w-100 m-1">${classmate.name}</button>`;
+			classmateNameEl.innerHTML += `<button id="wrongAnswer" class="btn btn-light w-50 m-1">${classmate}</button>`;
 		}
     })
 }
 
 getClassmate();
 
-cardEl.addEventListener('click', e =>{
+const showResults = () => {
+	// buttonEl.preventDefault();
+	quizEl.innerHTML = "";
+	quizEl.innerHTML += `<h3 class="m-2">Your correct guesses were:</h3>`;
+
+	counterEl.innerText = `${correct.length}/10 was correct!`;
+
+	correct.forEach(correctGuess => {
+		quizEl.innerHTML += `<div class="btn btn-success m-1">${correctGuess}</div>`;
+	})
+
+	quizEl.innerHTML += `<h3 class="m-2">Your incorrect guesses were:</h3>`;
+
+	incorrect.forEach(incorrectGuess => {
+		quizEl.innerHTML += `<div class="btn btn-danger m-1">${incorrectGuess}</div>`;
+	})
+
+}
+
+quizEl.addEventListener('click', e =>{
 	if(e.target.tagName === 'BUTTON'){
-		console.log(e.target);
+		// console.log(e.target);
 
 		guess++;
+		counterEl.innerText = `${guess}/10`;
+		console.log(`You have made ${guess} guesses`);
 
 		if(e.target.id === 'correctAnswer'){
-			console.log("Correct answer");
+			// console.log("Correct answer");
+			correctGuesses++;
 
+			resultEl.innerText = "Correct! 👍";
+			console.log(`You have made ${correctGuesses} correct guesses`);
 			correct.push(e.target.innerText);
 
 			console.log(correct);
 		} else{
-			console.log("Incorrect answer");
+			resultEl.innerText = "Incorrect 👎";
 			incorrect.push(e.target.innerText);
 			console.log(incorrect);
 		}
 
-		getClassmate();
+		if(guess === 10){
+			showResults();
+		} else{
+			getClassmate();
+		}
 	}
 });

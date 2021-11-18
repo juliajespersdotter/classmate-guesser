@@ -1,3 +1,8 @@
-.card{
+header{
+    background-color:indigo;
+    height: 5rem;
+}
+
+.quiz{
     width: 15rem;
 }

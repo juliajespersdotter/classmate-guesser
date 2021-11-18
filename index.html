@@ -10,22 +10,26 @@
 
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-</main>
+<body class="bg-dark text-white">
+<main>
 <header>
+    <div class="container">
+        <h1 class="text-center text-white mb-5 display-4">Classmate Guesser</h1>
+    </div>
     
 </header>
     <div class="container d-flex flex-column justify-content-center align-items-center">
-        <h1 class="text-center mb-5 display-4">Classmate Guesser</h1>
 
-        <div class="card text-black text-center w-75">
-            <img src="" alt="who dis?" class="card-img-top" id="classmate">
-            <!-- <div class="card-header bg-white text-black text-center w-100">Guess my name!</div> -->
-            <div id="alternatives" class="card-body d-flex flex-wrap justify-content-center align-items-center">
-            
+        <div class="counter display-4 m-3">0/10</div>
 
-            </div>
+        <div id="quiz" class="w-100">
+        <img id="classmate" src="" alt="classmate image" class="img-fluid m-4" >
+
+        <div id="button-wrapper" class="d-flex flex-wrap w-100 justify-content-center align-items-center" role="group">
+         
         </div>
+
+        <h3 class="result text-center w-100"></h3>
     </div>
     <main>
 
