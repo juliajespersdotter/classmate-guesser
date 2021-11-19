@@ -255,7 +255,7 @@ const showResults = () => {
 	quizEl.innerHTML = "";
 	quizEl.innerHTML += `<h3 class="m-2">Your correct guesses were:</h3>`;
 
-	counterEl.innerText = `${correct.length}/10 was correct!`;
+	counterEl.innerText = `${correctguesses.length}/10 was correct!`;
 
 	correct.forEach(correctGuess => {
 		quizEl.innerHTML += `<div class="btn btn-success m-1">${correctGuess}</div>`;
@@ -271,25 +271,18 @@ const showResults = () => {
 
 quizEl.addEventListener('click', e =>{
 	if(e.target.tagName === 'BUTTON'){
-		// console.log(e.target);
-
 		guess++;
 		counterEl.innerText = `${guess}/10`;
-		console.log(`You have made ${guess} guesses`);
 
 		if(e.target.id === 'correctAnswer'){
-			// console.log("Correct answer");
 			correctGuesses++;
-
 			resultEl.innerText = "Correct! 👍";
-			console.log(`You have made ${correctGuesses} correct guesses`);
 			correct.push(e.target.innerText);
 
 			console.log(correct);
 		} else{
 			resultEl.innerText = "Incorrect 👎";
 			incorrect.push(e.target.innerText);
-			console.log(incorrect);
 		}
 
 		if(guess === 10){
