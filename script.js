@@ -199,10 +199,10 @@ let counterEl = document.querySelector('.counter');
 // arrays to save answers
 const correct = [];
 const incorrect = [];
+let newStudents = [];
 
 //counter
 let guess = 0;
-let correctGuesses = 0;
 
 // function to shuffle arrays
 const shuffleArray = (array) => {
@@ -215,19 +215,25 @@ const shuffleArray = (array) => {
 }
 
 // get random correct classmate name + img and 3 random incorrect name + img
-const getClassmate = () => {
+const getClassmate = (studentArray) => {
 
 	// shuffle all objects in student array
-    shuffleArray(students);
-    console.log(students);
+    shuffleArray(studentArray);
+    console.log(studentArray);
 
+	
 	// get 4 random classmates
-    const randomClassmates = students.slice(0, 4);
-
+    const randomClassmates = studentArray.slice(0, 4);
+	
 	// get correct student name and img in smaller array
-	const correctStudent = randomClassmates[0];
+	let correctStudent = randomClassmates[0];
 	classmateImgEl.src = correctStudent.image;
-	const correctName = correctStudent.name;
+	let correctName = correctStudent.name;
+	
+	// filter out chosen student?
+	newStudents = studentArray.filter(student => student !== studentArray[0]);
+	console.log("New array:", newStudents);
+	console.log("Removed student:", studentArray[0]);
 	
 	// shuffle first four objects
     shuffleArray(randomClassmates);
@@ -248,14 +254,14 @@ const getClassmate = () => {
     })
 }
 
-getClassmate();
+getClassmate(students);
 
 const showResults = () => {
 	// buttonEl.preventDefault();
 	quizEl.innerHTML = "";
 	quizEl.innerHTML += `<h3 class="m-2">Your correct guesses were:</h3>`;
 
-	counterEl.innerText = `${correctguesses.length}/10 was correct!`;
+	counterEl.innerText = `${correct.length}/10 was correct!`;
 
 	correct.forEach(correctGuess => {
 		quizEl.innerHTML += `<div class="btn btn-success m-1">${correctGuess}</div>`;
@@ -275,7 +281,6 @@ quizEl.addEventListener('click', e =>{
 		counterEl.innerText = `${guess}/10`;
 
 		if(e.target.id === 'correctAnswer'){
-			correctGuesses++;
 			resultEl.innerText = "Correct! 👍";
 			correct.push(e.target.innerText);
 
@@ -288,7 +293,7 @@ quizEl.addEventListener('click', e =>{
 		if(guess === 10){
 			showResults();
 		} else{
-			getClassmate();
+			getClassmate(newStudents);
 		}
 	}
 });
