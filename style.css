@@ -6,3 +6,11 @@ header{
 .quiz{
     width: 15rem;
 }
+
+#wrongAnswer:active{
+    background-color: darkred;
+}
+
+#correctAnswer:active{
+    background-color:green;
+}

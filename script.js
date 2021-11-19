@@ -3,8 +3,10 @@
  * 
  * TODO:
  * 1. Create a function that randomises image and names from the array to be shown on the page 👍
- * 2. When name is clicked, call function again but save if the name was correct or incorrect, save to array incorrect [] and correct []
- * 3. Show a counter of how many guesses has been made
+ * 2. When name is clicked, call function again but save if the name was correct or incorrect, save to array incorrect [] and correct [] 👍
+ * 3. Show a counter of how many guesses has been made 
+ * 4. Filter out students that already appeared. 👍
+ * 5. Show which answers were correct and incorrect with images.
  */
 
  const students = [
@@ -166,43 +168,24 @@
 	},
 ];
 
-const missing_students = [
-	{
-		"name": "Andjela Saponjic",
-		"image": null,
-	},
-	{
-		"name": "Cazpian Levén",
-		"image": null,
-	},
-	{
-		"name": "Frida Lam",
-		"image": null,
-	},
-	{
-		"name": "Maxim Khnykin",
-		"image": null,
-	},
-	{
-		"name": "Philip Le",
-		"image": null,
-	},
-];
-
 const classmateImgEl = document.querySelector('#classmate');
 const classmateNameEl = document.querySelector('#button-wrapper');
 const quizEl = document.querySelector('#quiz');
-let resultEl = document.querySelector('.result');
+const resultWrapperEl = document.querySelector('#result-wrapper');
 let counterEl = document.querySelector('.counter');
+const playAgainEl = document.querySelector('#playAgain');
 
 
 // arrays to save answers
-const correct = [];
-const incorrect = [];
+let correct = [];
+const highscore = [];
+let incorrect = [];
 let newStudents = [];
+let correctAnswers = [];
 
 //counter
 let guess = 0;
+let correctGuess = 0;
 
 // function to shuffle arrays
 const shuffleArray = (array) => {
@@ -216,11 +199,8 @@ const shuffleArray = (array) => {
 
 // get random correct classmate name + img and 3 random incorrect name + img
 const getClassmate = (studentArray) => {
-
 	// shuffle all objects in student array
     shuffleArray(studentArray);
-    console.log(studentArray);
-
 	
 	// get 4 random classmates
     const randomClassmates = studentArray.slice(0, 4);
@@ -230,26 +210,22 @@ const getClassmate = (studentArray) => {
 	classmateImgEl.src = correctStudent.image;
 	let correctName = correctStudent.name;
 	
-	// filter out chosen student?
-	newStudents = studentArray.filter(student => student !== studentArray[0]);
-	console.log("New array:", newStudents);
-	console.log("Removed student:", studentArray[0]);
+	// filter out chosen student
+	newStudents = studentArray.filter(student => student !== correctStudent);
+
+	correctAnswers = studentArray.filter(student => student === correctStudent);
 	
 	// shuffle first four objects
     shuffleArray(randomClassmates);
-    console.log(randomClassmates);
-
 	classmateNameEl.innerHTML = "";
 
 	const randomNames = randomClassmates.map(classmate => classmate.name);
 
     randomNames.forEach(classmate => {	
 		if(classmate == correctName){
-			console.log("This is the right answer!", correctName);
-
-			classmateNameEl.innerHTML += `<button id="correctAnswer" class="btn btn-light w-50 m-1">${classmate}</button>`;
+			classmateNameEl.innerHTML += `<button id="correctAnswer" class="btn btn-light btn-block m-1">${classmate}</button>`;
 		} else {
-			classmateNameEl.innerHTML += `<button id="wrongAnswer" class="btn btn-light w-50 m-1">${classmate}</button>`;
+			classmateNameEl.innerHTML += `<button id="wrongAnswer" class="btn btn-light btn-block m-1">${classmate}</button>`;
 		}
     })
 }
@@ -257,21 +233,39 @@ const getClassmate = (studentArray) => {
 getClassmate(students);
 
 const showResults = () => {
-	// buttonEl.preventDefault();
-	quizEl.innerHTML = "";
-	quizEl.innerHTML += `<h3 class="m-2">Your correct guesses were:</h3>`;
+	quizEl.classList.add('d-none');
+	quizEl.classList.remove('d-flex');
+	resultWrapperEl.classList.remove('d-none');
+	playAgainEl.classList.remove('d-none');
 
+	if(correctGuess > highscore[0]){
+		resultWrapperEl.innerHTML += `<h2 class="alert alert-success" >New highscore! Your previous highscore was ${highscore[0]}. Your new highscore is ${correctGuess}</h2>`
+
+		highscore.sort();
+	}
+	else if(correctGuess <= highscore[0]){
+		resultWrapperEl.innerHTML += `<h2 class="alert alert-warning">No improvements. Your highscore is still ${highscore[0]}.</h2>`
+
+		highscore.sort();
+	}
+
+	resultWrapperEl.innerHTML += `<h3 class="m-2">Your correct guesses were:</h3>`;
+	
 	counterEl.innerText = `${correct.length}/10 was correct!`;
 
+
+	// which answers were correct?
 	correct.forEach(correctGuess => {
-		quizEl.innerHTML += `<div class="btn btn-success m-1">${correctGuess}</div>`;
+		resultWrapperEl.innerHTML += `<div class="btn btn-success m-1">${correctGuess}</div>`;
 	})
 
-	quizEl.innerHTML += `<h3 class="m-2">Your incorrect guesses were:</h3>`;
+	resultWrapperEl.innerHTML += `<h3 class="m-2">Your incorrect guesses were:</h3>`;
 
+	// which answers were incorrect?
 	incorrect.forEach(incorrectGuess => {
-		quizEl.innerHTML += `<div class="btn btn-danger m-1">${incorrectGuess}</div>`;
+		resultWrapperEl.innerHTML += `<div class="btn btn-danger m-1">${incorrectGuess}</div>`;
 	})
+
 
 }
 
@@ -281,19 +275,32 @@ quizEl.addEventListener('click', e =>{
 		counterEl.innerText = `${guess}/10`;
 
 		if(e.target.id === 'correctAnswer'){
-			resultEl.innerText = "Correct! 👍";
+			correctGuess++;
 			correct.push(e.target.innerText);
-
-			console.log(correct);
 		} else{
-			resultEl.innerText = "Incorrect 👎";
 			incorrect.push(e.target.innerText);
 		}
 
 		if(guess === 10){
+			highscore.push(correctGuess);
+			console.log(highscore);
 			showResults();
 		} else{
 			getClassmate(newStudents);
 		}
 	}
 });
+
+playAgainEl.addEventListener('click', () => {
+	// reset quiz 
+	quizEl.classList.remove('d-none');
+	quizEl.classList.add('d-flex');
+	resultWrapperEl.innerHTML = "";
+	playAgainEl.classList.add('d-none');
+	guess = 0;
+	correctGuess = 0;
+	counterEl.innerText = `${guess}/10`;
+	correct = [];
+	incorrect = [];
+	getClassmate(students);
+})
