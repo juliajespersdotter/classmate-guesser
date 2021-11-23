@@ -8,7 +8,7 @@ header{
 }
 
 #wrongAnswer:active{
-    background-color: darkred;
+    background-color: rgb(236, 220, 220);
 }
 
 #correctAnswer:active{

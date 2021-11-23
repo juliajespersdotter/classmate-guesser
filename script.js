@@ -177,9 +177,8 @@ const playAgainEl = document.querySelector('#playAgain');
 
 
 // arrays to save answers
-let correct = [];
+let answers = [];
 const highscore = [];
-let incorrect = [];
 let newStudents = [];
 let correctAnswers = [];
 
@@ -210,10 +209,11 @@ const getClassmate = (studentArray) => {
 	classmateImgEl.src = correctStudent.image;
 	let correctName = correctStudent.name;
 	
-	// filter out chosen student
+	// filter out the students that are not correct
 	newStudents = studentArray.filter(student => student !== correctStudent);
 
-	correctAnswers = studentArray.filter(student => student === correctStudent);
+	correctAnswers.push(correctStudent);
+	console.log("Correct answer:", correctAnswers);
 	
 	// shuffle first four objects
     shuffleArray(randomClassmates);
@@ -221,6 +221,7 @@ const getClassmate = (studentArray) => {
 
 	const randomNames = randomClassmates.map(classmate => classmate.name);
 
+	// create a button for each random classmate
     randomNames.forEach(classmate => {	
 		if(classmate == correctName){
 			classmateNameEl.innerHTML += `<button id="correctAnswer" class="btn btn-light btn-block m-1">${classmate}</button>`;
@@ -233,40 +234,42 @@ const getClassmate = (studentArray) => {
 getClassmate(students);
 
 const showResults = () => {
+	// show and print results
 	quizEl.classList.add('d-none');
 	quizEl.classList.remove('d-flex');
 	resultWrapperEl.classList.remove('d-none');
 	playAgainEl.classList.remove('d-none');
 
+	// show highscore
 	if(correctGuess > highscore[0]){
 		resultWrapperEl.innerHTML += `<h2 class="alert alert-success" >New highscore! Your previous highscore was ${highscore[0]}. Your new highscore is ${correctGuess}</h2>`
 
 		highscore.sort();
 	}
-	else if(correctGuess <= highscore[0]){
+	else if(correctGuess < highscore[0]){
 		resultWrapperEl.innerHTML += `<h2 class="alert alert-warning">No improvements. Your highscore is still ${highscore[0]}.</h2>`
 
 		highscore.sort();
 	}
 
-	resultWrapperEl.innerHTML += `<h3 class="m-2">Your correct guesses were:</h3>`;
+	resultWrapperEl.innerHTML += `<h3 class="m-2">Correct and Incorrect answers:</h3>`;
 	
-	counterEl.innerText = `${correct.length}/10 was correct!`;
+	counterEl.innerText = `${correctGuess}/10 was correct!`;
 
 
 	// which answers were correct?
-	correct.forEach(correctGuess => {
-		resultWrapperEl.innerHTML += `<div class="btn btn-success m-1">${correctGuess}</div>`;
+	correctAnswers.forEach(correctGuess => {
+		// FIXED
+		let index = correctAnswers.indexOf(correctGuess);
+			resultWrapperEl.innerHTML += `<img src="${correctGuess.image}">
+			<div class="btn btn-info m-1">Correct answer was: ${correctGuess.name}</div>`;
+
+		if(correctGuess.name === `${answers[index]}`){
+			resultWrapperEl.innerHTML += `<div class="btn btn-success m-1">You guessed: ${answers[index]}</div>`;
+		} else{
+			resultWrapperEl.innerHTML += `<div class="btn btn-danger m-1">You guessed: ${answers[index]}</div>`;
+		}
 	})
-
-	resultWrapperEl.innerHTML += `<h3 class="m-2">Your incorrect guesses were:</h3>`;
-
-	// which answers were incorrect?
-	incorrect.forEach(incorrectGuess => {
-		resultWrapperEl.innerHTML += `<div class="btn btn-danger m-1">${incorrectGuess}</div>`;
-	})
-
-
 }
 
 quizEl.addEventListener('click', e =>{
@@ -276,9 +279,11 @@ quizEl.addEventListener('click', e =>{
 
 		if(e.target.id === 'correctAnswer'){
 			correctGuess++;
-			correct.push(e.target.innerText);
+			answers.push(e.target.innerText);
+			console.log("You answered:", answers);
 		} else{
-			incorrect.push(e.target.innerText);
+			answers.push(e.target.innerText);
+			console.log("You answered:", answers);
 		}
 
 		if(guess === 10){
@@ -300,7 +305,7 @@ playAgainEl.addEventListener('click', () => {
 	guess = 0;
 	correctGuess = 0;
 	counterEl.innerText = `${guess}/10`;
-	correct = [];
-	incorrect = [];
+	answers = [];
+	correctAnswers = [];
 	getClassmate(students);
 })
