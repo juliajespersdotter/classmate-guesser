@@ -225,9 +225,10 @@ const getClassmate = (studentArray) => {
 	// create a button for each random classmate
     randomNames.forEach(classmate => {	
 		if(classmate == correctName){
-			classmateNameEl.innerHTML += `<button id="correct-answer" class="col w-100 btn btn-outline-light d-sm-block">${classmate}</button>`;
+			// why tf does this not work
+			classmateNameEl.innerHTML += `<button id="correct-answer" class="col col-sm-12 col-md-12 col-lg-6 btn btn-outline-light d-sm-block">${classmate}</button>`;
 		} else {
-			classmateNameEl.innerHTML += `<button class="col w-100 btn btn-outline-light d-sm-block">${classmate}</button>`;
+			classmateNameEl.innerHTML += `<button class="col col-sm-12 col-md-12 col-lg-6 btn btn-outline-light d-sm-block">${classmate}</button>`;
 		}
     })
 }
