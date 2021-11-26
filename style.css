@@ -1,17 +1,28 @@
 header{
     background-color:indigo;
-    height: 5rem;
 }
 
-.quiz{
-    width: 15rem;
+button{
+    padding: 2%;
+    margin-top: 2%;
 }
 
-#wrongAnswer:active{
-    background-color: red;
+.card{
+    width: 50%;
 }
 
-#correctAnswer:active{
-    background-color:green;
+#correct-answer:active{
+    background-color: green;
 }
 
+@media screen and (max-width: 1000px) {
+    .card{
+        width: 70%;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .card{
+        width: 90%;
+    }
+}

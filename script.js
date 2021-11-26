@@ -225,9 +225,9 @@ const getClassmate = (studentArray) => {
 	// create a button for each random classmate
     randomNames.forEach(classmate => {	
 		if(classmate == correctName){
-			classmateNameEl.innerHTML += `<button id="correctAnswer" class="btn btn-light btn-block">${classmate}</button>`;
+			classmateNameEl.innerHTML += `<button id="correct-answer" class="col w-100 btn btn-outline-light d-sm-block">${classmate}</button>`;
 		} else {
-			classmateNameEl.innerHTML += `<button id="wrongAnswer" class="btn btn-light btn-block">${classmate}</button>`;
+			classmateNameEl.innerHTML += `<button class="col w-100 btn btn-outline-light d-sm-block">${classmate}</button>`;
 		}
     })
 }
@@ -240,17 +240,16 @@ const showResults = () => {
 	quizEl.classList.remove('d-flex');
 	resultWrapperEl.classList.remove('d-none');
 	playAgainEl.classList.remove('d-none');
+	highscore.sort();
 
 	// show highscore
 	if(correctGuess > highscore[0]){
-		resultWrapperEl.innerHTML += `<h2 class="alert alert-success" >New highscore! Your previous highscore was ${highscore[0]}. Your new highscore is ${correctGuess}</h2>`;
+		resultWrapperEl.innerHTML += `<h2 class="alert alert-success p-2 m-0" >New highscore! Your previous highscore was ${highscore[0]}. Your new highscore is ${correctGuess}</h2>`;
 
-		highscore.sort();
 	}
-	else if(correctGuess < highscore[0]){
-		resultWrapperEl.innerHTML += `<h2 class="alert alert-warning">No improvements. Your highscore is still ${highscore[0]}.</h2>`;
+	else if(correctGuess <= highscore[0]){
+		resultWrapperEl.innerHTML += `<h2 class="alert alert-warning p-2 m-0">No improvements. Your highscore is still ${highscore[0]}.</h2>`;
 
-		highscore.sort();
 	}
 	
 	counterEl.innerText = `${correctGuess}/10 was correct!`;
@@ -280,13 +279,11 @@ quizEl.addEventListener('click', e =>{
 		guess++;
 		counterEl.innerText = `${guess}/10`;
 
-		if(e.target.id === 'correctAnswer'){
+		if(e.target.id === 'correct-answer'){
 			correctGuess++;
 			answers.push(e.target.innerText);
-			console.log("You answered:", answers);
 		} else{
 			answers.push(e.target.innerText);
-			console.log("You answered:", answers);
 		}
 
 		if(guess === 10){
@@ -304,8 +301,9 @@ playAgainEl.addEventListener('click', () => {
 	// reset quiz 
 	quizEl.classList.remove('d-none');
 	quizEl.classList.add('d-flex');
-	resultWrapperEl.innerHTML = "";
-	playAgainEl.classList.add('d-none');
+	resultWrapperEl.innerHTML = `<button id="playAgain" class="btn btn-info d-none btn-block">Play again</button>`;
+	resultWrapperEl.classList.add('d-none');
+	// playAgainEl.classList.add('d-none');
 	guess = 0;
 	correctGuess = 0;
 	counterEl.innerText = `${guess}/10`;
