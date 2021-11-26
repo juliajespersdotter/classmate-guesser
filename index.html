@@ -14,23 +14,23 @@
 <main>
 <header>
     <div class="container">
-        <h1 class="text-center text-white mb-5 display-4">Classmate Guesser</h1>
+        <h1 class="text-center text-white mb-5">Classmate Guesser</h1>
     </div>
     
 </header>
     <div class="container d-flex flex-column justify-content-center align-items-center">
 
-        <div class="counter display-4 m-3">0/10</div>
+        <h4 class="counter text-center m-3">0/10</h4>
 
-        <div id="quiz" class="w-70 col-sm-auto flex-sm-column justify-content-center align-items-center flex-wrap">
-        <img id="classmate" src="" alt="classmate image" class="img-fluid ">
+        <div id="result-wrapper" class="card d-none w-70">
+        </div>
+
+        <div id="quiz" class="card w-70 col-sm-auto flex-sm-column justify-content-center align-items-center flex-wrap m-0 p-0">
+        <img id="classmate" src="" alt="classmate image" class="card-img-top">
 
         <div id="button-wrapper" class="w-100">
          
         </div>
-    </div>
-
-    <div id="result-wrapper">
     </div>
     
     <button id="playAgain" class="btn btn-info d-none">Play again</button>

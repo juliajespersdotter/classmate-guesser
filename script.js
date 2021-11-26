@@ -7,7 +7,8 @@
  * 3. Show a counter of how many guesses has been made 
  * 4. Filter out students that already appeared. 👍
  * 5. Show which answers were correct and incorrect with images.
- */
+ * 6. Fix styles and highscore to work properly!! Clean up code.
+ */ 
 
  const students = [
 	{
@@ -224,9 +225,9 @@ const getClassmate = (studentArray) => {
 	// create a button for each random classmate
     randomNames.forEach(classmate => {	
 		if(classmate == correctName){
-			classmateNameEl.innerHTML += `<button id="correctAnswer" class="btn btn-light btn-block m-1">${classmate}</button>`;
+			classmateNameEl.innerHTML += `<button id="correctAnswer" class="btn btn-light btn-block">${classmate}</button>`;
 		} else {
-			classmateNameEl.innerHTML += `<button id="wrongAnswer" class="btn btn-light btn-block m-1">${classmate}</button>`;
+			classmateNameEl.innerHTML += `<button id="wrongAnswer" class="btn btn-light btn-block">${classmate}</button>`;
 		}
     })
 }
@@ -242,36 +243,38 @@ const showResults = () => {
 
 	// show highscore
 	if(correctGuess > highscore[0]){
-		resultWrapperEl.innerHTML += `<h2 class="alert alert-success" >New highscore! Your previous highscore was ${highscore[0]}. Your new highscore is ${correctGuess}</h2>`
+		resultWrapperEl.innerHTML += `<h2 class="alert alert-success" >New highscore! Your previous highscore was ${highscore[0]}. Your new highscore is ${correctGuess}</h2>`;
 
 		highscore.sort();
 	}
 	else if(correctGuess < highscore[0]){
-		resultWrapperEl.innerHTML += `<h2 class="alert alert-warning">No improvements. Your highscore is still ${highscore[0]}.</h2>`
+		resultWrapperEl.innerHTML += `<h2 class="alert alert-warning">No improvements. Your highscore is still ${highscore[0]}.</h2>`;
 
 		highscore.sort();
 	}
-
-	resultWrapperEl.innerHTML += `<h3 class="m-2">Correct and Incorrect answers:</h3>`;
 	
 	counterEl.innerText = `${correctGuess}/10 was correct!`;
 
 
 	// which answers were correct?
 	correctAnswers.forEach(correctGuess => {
-		// FIXED
+		// show answers depending on if it is correct or not with the corresponding image
+
 		let index = correctAnswers.indexOf(correctGuess);
-			resultWrapperEl.innerHTML += `<img src="${correctGuess.image}">
-			<div class="btn btn-info m-1">Correct answer was: ${correctGuess.name}</div>`;
+		
+		resultWrapperEl.innerHTML += `
+		<img id="classmate" src="${correctGuess.image}" alt="classmate image" class="img-fluid card-img-top">
+		<p class="btn btn-info m-0">Correct answer was: ${correctGuess.name}</p>`;
 
 		if(correctGuess.name === `${answers[index]}`){
-			resultWrapperEl.innerHTML += `<div class="btn btn-success m-1">You guessed: ${answers[index]}</div>`;
+			resultWrapperEl.innerHTML += `<p class="btn btn-success m-0">You guessed: ${answers[index]}</p>`;
 		} else{
-			resultWrapperEl.innerHTML += `<div class="btn btn-danger m-1">You guessed: ${answers[index]}</div>`;
+			resultWrapperEl.innerHTML += `<p class="btn btn-danger m-0">You guessed: ${answers[index]}</p>`;
 		}
 	})
 }
 
+// quiz click event
 quizEl.addEventListener('click', e =>{
 	if(e.target.tagName === 'BUTTON'){
 		guess++;
@@ -296,6 +299,7 @@ quizEl.addEventListener('click', e =>{
 	}
 });
 
+// reset quiz with button at result screen
 playAgainEl.addEventListener('click', () => {
 	// reset quiz 
 	quizEl.classList.remove('d-none');

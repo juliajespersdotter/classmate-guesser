@@ -8,9 +8,10 @@ header{
 }
 
 #wrongAnswer:active{
-    background-color: rgb(236, 220, 220);
+    background-color: red;
 }
 
 #correctAnswer:active{
     background-color:green;
 }
+
