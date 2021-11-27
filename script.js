@@ -215,7 +215,6 @@ const getClassmate = (studentArray) => {
 
 	// push correct student to array in order to show results at the end
 	correctAnswers.push(correctStudent);
-	console.log("Correct answer:", correctAnswers);
 	
 	// shuffle first four objects
     shuffleArray(randomClassmates);
@@ -288,7 +287,6 @@ quizEl.addEventListener('click', e =>{
 
 		if(guess === 10){
 			highscore.push(correctGuess);
-			console.log(highscore);
 			showResults();
 		} else{
 			// run getclassmate function again with filtered array
