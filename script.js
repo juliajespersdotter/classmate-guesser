@@ -3,11 +3,11 @@
  * 
  * TODO:
  * 1. Create a function that randomises image and names from the array to be shown on the page 👍
- * 2. When name is clicked, call function again but save if the name was correct or incorrect, save to array incorrect [] and correct [] 👍
- * 3. Show a counter of how many guesses has been made 
+ * 2. When name is clicked, call function again but save if the name was correct or incorrect, save to array answers [] and correctAnswers [] 👍
+ * 3. Show a counter of how many guesses has been made 👍
  * 4. Filter out students that already appeared. 👍
- * 5. Show which answers were correct and incorrect with images.
- * 6. Fix styles and highscore to work properly!! Clean up code.
+ * 5. Show which answers were correct and incorrect with images. 👍
+ * 6. Fix styles and highscore to work properly!! Clean up code. 👍
  */ 
 
  const students = [
@@ -241,20 +241,18 @@ const showResults = () => {
 	quizEl.classList.remove('d-flex');
 	resultWrapperEl.classList.remove('d-none');
 	playAgainEl.classList.remove('d-none');
-	highscore.sort();
 
 	// show highscore
-	if(correctGuess > highscore[0]){
+	if(correctGuess >= highscore[0]){
 		resultWrapperEl.innerHTML += `<h2 class="alert alert-success p-2 m-0" >New highscore! Your previous highscore was ${highscore[0]}. Your new highscore is ${correctGuess}</h2>`;
-
 	}
-	else if(correctGuess <= highscore[0]){
-		resultWrapperEl.innerHTML += `<h2 class="alert alert-warning p-2 m-0">No improvements. Your highscore is still ${highscore[0]}.</h2>`;
-
+	else if(correctGuess < highscore[0]){
+		resultWrapperEl.innerHTML += `<h2 class="alert alert-warning p-2 m-0">Better luck next time. Your highscore is still ${highscore[0]}.</h2>`;
 	}
 	
+	// sort highscore array to be in descending order, highest score is the first number in array
+	highscore.sort((a , b) => (b - a));
 	counterEl.innerText = `${correctGuess}/10 was correct!`;
-
 
 	// which answers were correct?
 	correctAnswers.forEach(correctGuess => {
@@ -289,6 +287,7 @@ quizEl.addEventListener('click', e =>{
 
 		if(guess === 10){
 			highscore.push(correctGuess);
+			//sort scores array to be descending
 			console.log(highscore);
 			showResults();
 		} else{
@@ -302,7 +301,7 @@ playAgainEl.addEventListener('click', () => {
 	// reset quiz 
 	quizEl.classList.remove('d-none');
 	quizEl.classList.add('d-flex');
-	resultWrapperEl.innerHTML = `<button id="playAgain" class="btn btn-info d-none btn-block">Play again</button>`;
+	resultWrapperEl.innerHTML = `<button id="playAgain" class="btn btn-info d-none">Play again</button>`;
 	resultWrapperEl.classList.add('d-none');
 	// playAgainEl.classList.add('d-none');
 	guess = 0;
