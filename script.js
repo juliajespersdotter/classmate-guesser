@@ -199,7 +199,7 @@ const shuffleArray = (array) => {
 
 // get random correct classmate name + img and 3 random incorrect name + img
 const getClassmate = (studentArray) => {
-	// shuffle all objects in student array
+	// shuffle all objects in array
     shuffleArray(studentArray);
 	
 	// get 4 random classmates
@@ -213,6 +213,7 @@ const getClassmate = (studentArray) => {
 	// filter out the students that are not correct
 	newStudents = studentArray.filter(student => student !== correctStudent);
 
+	// push correct student to array in order to show results at the end
 	correctAnswers.push(correctStudent);
 	console.log("Correct answer:", correctAnswers);
 	
@@ -220,19 +221,20 @@ const getClassmate = (studentArray) => {
     shuffleArray(randomClassmates);
 	classmateNameEl.innerHTML = "";
 
+	// map only the names in the objects to loop over
 	const randomNames = randomClassmates.map(classmate => classmate.name);
 
 	// create a button for each random classmate
     randomNames.forEach(classmate => {	
-		if(classmate == correctName){
-			// why tf does this not work
-			classmateNameEl.innerHTML += `<button id="correct-answer" class="col col-sm-12 col-md-12 col-lg-6 btn btn-outline-light d-sm-block">${classmate}</button>`;
+		if (classmate === correctName){
+			classmateNameEl.innerHTML += `<button id="correct-answer" class="col col-sm-12 col-md-12 col-lg-6 btn btn-outline-dark d-sm-block">${classmate}</button>`;
 		} else {
-			classmateNameEl.innerHTML += `<button class="col col-sm-12 col-md-12 col-lg-6 btn btn-outline-light d-sm-block">${classmate}</button>`;
+			classmateNameEl.innerHTML += `<button class="col col-sm-12 col-md-12 col-lg-6 btn btn-outline-dark d-sm-block">${classmate}</button>`;
 		}
     })
 }
 
+// first function run with original array
 getClassmate(students);
 
 const showResults = () => {
@@ -257,7 +259,6 @@ const showResults = () => {
 	// which answers were correct?
 	correctAnswers.forEach(correctGuess => {
 		// show answers depending on if it is correct or not with the corresponding image
-
 		let index = correctAnswers.indexOf(correctGuess);
 		
 		resultWrapperEl.innerHTML += `
@@ -287,10 +288,10 @@ quizEl.addEventListener('click', e =>{
 
 		if(guess === 10){
 			highscore.push(correctGuess);
-			//sort scores array to be descending
 			console.log(highscore);
 			showResults();
 		} else{
+			// run getclassmate function again with filtered array
 			getClassmate(newStudents);
 		}
 	}
@@ -303,7 +304,7 @@ playAgainEl.addEventListener('click', () => {
 	quizEl.classList.add('d-flex');
 	resultWrapperEl.innerHTML = `<button id="playAgain" class="btn btn-info d-none">Play again</button>`;
 	resultWrapperEl.classList.add('d-none');
-	// playAgainEl.classList.add('d-none');
+	playAgainEl.classList.add('d-none');
 	guess = 0;
 	correctGuess = 0;
 	counterEl.innerText = `${guess}/10`;

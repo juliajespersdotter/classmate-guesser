@@ -10,11 +10,11 @@
 
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-dark text-white">
+<body class="bg-light">
 <main>
 <header>
     <div class="container">
-        <h1 class="text-center text-white p-5">Classmate Guesser</h1>
+        <h1 class="text-center p-5">Classmate Guesser</h1>
     </div>
     
 </header>
@@ -23,20 +23,26 @@
         <h4 class="counter text-center m-3">0/10</h4>
 
         <button id="playAgain" class="btn btn-success d-none mb-2">Play again</button>
-        <div id="result-wrapper" class="card bg-dark d-none">
+        <div id="result-wrapper" class="card d-none">
         </div>
 
-            <div id="quiz" class="bg-dark text-white card d-flex justify-content-center align-items-center flex-wrap">
+            <div id="quiz" class="border-0 bg-light card d-flex justify-content-center align-items-center flex-wrap">
                 <img id="classmate" src="" alt="classmate image" class="card-img-top">
-        
-                <div id="button-wrapper" class="w-100 row">
                 
+                    <p class="alert alert-warning text-center w-100 m-2">Who is this?</p>
+                    <div id="button-wrapper" class="w-100 row">
+                    
+                    
                 </div>
             </div>
     </div>
     
             
 </main>
+
+<footer>
+    <p class="text-center p-4 m-0 mt-5">Made by Julia Jespersdotter Högman</p>
+</footer>
 
         <script src="script.js"></script>
 </body>
